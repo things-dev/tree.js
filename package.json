@@ -13,12 +13,14 @@
   ],
   "license": "MIT",
   "scripts": {
+    "prepare": "husky install",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "biome format ./src --write",
     "lint": "biome lint ./src",
     "lint:fix": "biome lint --apply ./src"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.4.1"
+    "@biomejs/biome": "^1.4.1",
+    "husky": "^8.0.3"
   }
 }
