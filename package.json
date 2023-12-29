@@ -1,6 +1,7 @@
 {
   "name": "tree-js",
   "version": "1.0.0",
+  "type": "module",
   "author": "Yuki Shimizu",
   "main": "index.js",
   "description": "",
@@ -15,6 +16,7 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
+    "build": "rm -rf ./dist/index.js && bun build ./src --outfile=./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "typecheck": "tsc --pretty --noEmit",
     "format": "biome format ./src --write",
