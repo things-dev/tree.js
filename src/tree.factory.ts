@@ -16,11 +16,14 @@ export const TreeFactory = {
     key: string;
     childKey: K;
   }) {
+    if (typeof childKey !== "string") {
+      throw new Error("childKey must be a string");
+    }
     // Because a node can have multiple children, omit the childKey that specifies only one.
     const tree = new Tree<Omit<T, K>>({
       nodes,
       key,
-      childKey: childKey as string,
+      childKey,
     });
     if (!treeMap.has(tree.treeKey)) {
       treeMap.set(tree.treeKey, tree);
