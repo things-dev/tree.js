@@ -1,7 +1,7 @@
 {
-  "name": "@things/treejs",
+  "name": "@thingsinc/treejs",
   "author": "Yuki Shimizu",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "types": "./esm/index.d.ts",
@@ -26,7 +26,7 @@
     "check": "biome check ./src",
     "lint": "biome lint ./src",
     "lint:fix": "biome lint --apply ./src",
-    "release": "np"
+    "release": "np --no-tests"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.4.1",
@@ -39,5 +39,8 @@
   "lint-staged": {
     "*.ts": ["biome format --write", "biome lint"]
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md", "src"]
+  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
+  "publishConfig": {
+    "access": "public"
+  }
 }
