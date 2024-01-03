@@ -1,12 +1,6 @@
 import { TreeType } from "./tree";
 import { treeMap } from "./tree.factory";
 
-export type NodeModel = {
-  level: number;
-  parent?: NodeModel;
-  children: NodeModel[];
-};
-
 export class Node<T> {
   level: number; // root: 0
   parentKey: string | null;
