@@ -1,3 +1,5 @@
+import { TreeType, treeMap } from "./tree";
+
 export type NodeModel = {
   level: number;
   parent?: NodeModel;
@@ -6,24 +8,47 @@ export type NodeModel = {
 
 export class Node<T> {
   level: number; // root: 0
-  parent: Node<T> | undefined;
+  parentKey: string | null;
   children: Node<T>[];
   data: T;
-
   isRoot: boolean;
   isLeaf: boolean;
   hasParent: boolean;
   hasChildren: boolean;
 
-  constructor(model: { level: number; children: Node<T>[]; data?: T }) {
-    this.level = model.level;
-    this.parent = undefined;
-    this.children = model.children;
-    this.data = model.data;
-    this.isRoot = !this.parent;
+  #treeKey: string;
+  #key: string;
+  #childKey: string;
+
+  constructor({
+    treeKey,
+    key,
+    childKey,
+    level,
+    parentKey,
+    children,
+    data,
+  }: {
+    treeKey: string;
+    key: string;
+    childKey: string;
+    level: number;
+    parentKey: string | null;
+    children: Node<T>[];
+    data?: T;
+  }) {
+    this.level = level;
+    this.parentKey = parentKey;
+    this.children = children;
+    this.data = data;
+    this.isRoot = !this.parentKey;
     this.isLeaf = this.children.length === 0;
     this.hasParent = !this.isRoot;
     this.hasChildren = !this.isLeaf;
+
+    this.#treeKey = treeKey;
+    this.#key = key;
+    this.#childKey = childKey;
   }
 
   move(fn: (node: Node<T>) => boolean) {
@@ -41,25 +66,42 @@ export class Node<T> {
     return true;
   }
 
-  addChild(child: Node<T>) {
-    child.parent = this;
-    this.children.push(child);
-    return child;
+  addChild({ data }: { data: T }) {
+    const newChildNode = new Node<T>({
+      treeKey: this.#treeKey,
+      key: this.#key,
+      childKey: this.#childKey,
+      level: this.level + 1,
+      parentKey: this.data[this.#key],
+      children: [],
+      data,
+    });
+    this.children.push(newChildNode);
+    return newChildNode;
   }
 
   remove() {
-    if (this.parent) {
-      const index = this.parent.children.indexOf(this);
-      this.parent.children.splice(index, 1);
+    const parentNode = this.getParentNode();
+    if (parentNode) {
+      const index = parentNode.children.indexOf(this);
+      parentNode.children.splice(index, 1);
     }
+  }
+
+  getParentNode() {
+    const tree = this.getTree();
+    const parentNode = tree.find(
+      (node) => node.data[this.#key] === this.parentKey,
+    );
+    return parentNode;
   }
 
   getAncestorNodes() {
     const ancestors: Node<T>[] = [];
-    let ancestor = this.parent;
+    let ancestor = this.getParentNode();
     while (ancestor) {
       ancestors.unshift(ancestor);
-      ancestor = ancestor.parent;
+      ancestor = ancestor.getParentNode();
     }
     return ancestors;
   }
@@ -67,5 +109,10 @@ export class Node<T> {
   getPath(key: string) {
     const ancestors = this.getAncestorNodes();
     return ancestors.map((ancestor) => ancestor.data[key]).join("/");
+  }
+
+  getTree() {
+    const tree = treeMap.get(this.#treeKey) as TreeType<T>;
+    return tree;
   }
 }

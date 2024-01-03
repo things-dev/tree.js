@@ -1,8 +1,22 @@
 import { Node } from "./node";
 
-export type NodeParam<T> = { level: number; data: T; children: NodeParam<T>[] };
+export type NodeParam<T> = {
+  level: number;
+  data: T;
+  parentKey: string | null;
+  children: NodeParam<T>[];
+};
 
-export class Tree<T> {
+/*
+ *  Bridge to reference a Tree from a specific Node.
+ *  If every node has a tree, the data will be more than necessary.
+ */
+export const treeMap = new Map<string, Tree<unknown>>();
+
+export type TreeType<T> = Tree<T>;
+
+class Tree<T> {
+  treeKey: string;
   root: Node<T>;
 
   constructor({
@@ -14,13 +28,16 @@ export class Tree<T> {
     key: string;
     childKey: string;
   }) {
-    const nodeModel = this.buildParams({
+    this.treeKey = Date.now().toString() + Math.random().toString();
+    const nodeModel = this.#buildParams({
       nodes,
       key,
       childKey,
     });
 
-    this.root = this.parse({
+    this.root = this.#parse({
+      key,
+      childKey,
       nodeModel,
     });
   }
@@ -36,6 +53,14 @@ export class Tree<T> {
     return targetNode;
   }
 
+  findOrThrow(fn: (node: Node<T>) => boolean) {
+    const targetNode = this.find(fn);
+    if (!targetNode) {
+      throw new Error("Target node not found");
+    }
+    return targetNode;
+  }
+
   findAll(fn: (node: Node<T>) => boolean) {
     const targetNodes: Node<T>[] = [];
     this.root.move((node) => {
@@ -47,21 +72,7 @@ export class Tree<T> {
     return targetNodes;
   }
 
-  private parse({ nodeModel }: { nodeModel: NodeParam<T> }) {
-    const node = new Node<T>({
-      level: nodeModel.level,
-      children: nodeModel.children.map((childNodeModel) =>
-        this.parse({
-          nodeModel: childNodeModel,
-        }),
-      ),
-      data: nodeModel.data,
-    });
-
-    return node;
-  }
-
-  private buildParams<T>({
+  #buildParams<T>({
     nodes,
     key,
     childKey,
@@ -71,13 +82,19 @@ export class Tree<T> {
     childKey: string;
   }) {
     const nodeMap = new Map<string, NodeParam<T>[]>();
-    const rootNodeParams = nodes.filter((node) => node.level === 0);
+    const rootNodeParams: NodeParam<T>[] = nodes
+      .filter((node) => node.level === 0)
+      .map((node) => ({
+        ...node,
+        parentKey: null,
+        children: [],
+      }));
     if (rootNodeParams.length === 0) {
       throw new Error("Level 0 root node not found");
     }
     const nestedNodes: NodeParam<T>[] = [];
 
-    // 特定のkeyを子として持つnodeをnodeMapに格納
+    // Store node with a specific key as a child in nodeMap
     for (const node of nodes) {
       const targetKey = node.data[key];
 
@@ -87,14 +104,36 @@ export class Tree<T> {
 
       nodeMap.get(targetKey).push({
         ...node,
+        parentKey: null,
         children: [],
       });
     }
 
     for (const node of nodes.sort((a, b) => b.level - a.level)) {
+      const parentNodes = Array(...nodeMap.values()).flat();
+
       if (!node.data[childKey]) {
+        const targetNode = nodeMap
+          .get(node.data[key])
+          .find(
+            (targetNode) =>
+              targetNode.level === node.level &&
+              targetNode.data[key] === node.data[key],
+          );
+        if (!targetNode) {
+          throw new Error(`Target node: ${key} not found`);
+        }
+        const parentNode = parentNodes.find(
+          (parentNode) =>
+            parentNode.level === targetNode.level - 1 &&
+            parentNode.data[childKey] === targetNode.data[key],
+        );
+        if (parentNode) {
+          targetNode.parentKey = parentNode.data[key];
+        }
         continue;
       }
+
       const childNode = nodeMap
         .get(node.data[childKey])
         .find(
@@ -104,24 +143,34 @@ export class Tree<T> {
         );
 
       if (childNode.level === 0) {
-        nestedNodes.push(this.removeChildKeyFromObj(childNode, childKey));
+        nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
       } else {
-        const parentNode = nodeMap
+        const targetNode = nodeMap
           .get(node.data[key])
           .find(
-            (parentNode) =>
-              parentNode.level + 1 === childNode.level &&
-              parentNode.data[childKey] === childNode.data[key] &&
-              !parentNode.children.includes(childNode),
+            (targetNode) =>
+              targetNode.level + 1 === childNode.level &&
+              targetNode.data[childKey] === childNode.data[key] &&
+              !targetNode.children.includes(childNode),
           );
-        if (!parentNode) {
+        if (!targetNode) {
           throw new Error("Parent node not found");
         }
-        parentNode.children.push(
-          this.removeChildKeyFromObj(childNode, childKey),
+        targetNode.children.push(
+          this.#removeChildKeyFromObj(childNode, childKey),
         );
-        if (parentNode.level === 1) {
-          nestedNodes.push(parentNode);
+        if (targetNode.level === 1) {
+          nestedNodes.push(targetNode);
+        }
+
+        const parentNode = parentNodes.find(
+          (parentNode) =>
+            parentNode.level === targetNode.level - 1 &&
+            parentNode.data[childKey] === targetNode.data[key] &&
+            targetNode.parentKey === null,
+        );
+        if (parentNode) {
+          targetNode.parentKey = parentNode.data[key];
         }
       }
     }
@@ -134,15 +183,67 @@ export class Tree<T> {
       {} as NodeParam<T>,
     );
     const rootNode = {
-      ...this.removeChildKeyFromObj({ ...rootNodeObj, children: [] }, childKey),
+      ...this.#removeChildKeyFromObj(
+        { ...rootNodeObj, children: [] },
+        childKey,
+      ),
       level: 0,
       children: nestedNodes,
     };
     return rootNode;
   }
 
-  private removeChildKeyFromObj<T>(node: NodeParam<T>, childKey: string) {
+  #parse({
+    key,
+    childKey,
+    nodeModel,
+  }: {
+    key: string;
+    childKey: string;
+    nodeModel: NodeParam<T>;
+  }) {
+    const node = new Node<T>({
+      treeKey: this.treeKey,
+      key,
+      childKey,
+      level: nodeModel.level,
+      parentKey: nodeModel.parentKey,
+      children: nodeModel.children.map((childNodeModel) =>
+        this.#parse({
+          key,
+          childKey,
+          nodeModel: childNodeModel,
+        }),
+      ),
+      data: nodeModel.data,
+    });
+
+    return node;
+  }
+
+  #removeChildKeyFromObj<T>(node: NodeParam<T>, childKey: string) {
     delete node.data[childKey];
     return node;
   }
 }
+
+export const TreeFactory = {
+  build<T, K extends keyof T>({
+    nodes,
+    key,
+    childKey,
+  }: {
+    nodes: { level: number; data: T }[];
+    key: string;
+    childKey: K;
+  }) {
+    // Because a node can have multiple children, omit the childKey that specifies only one.
+    const tree = new Tree<Omit<T, K>>({
+      nodes,
+      key,
+      childKey: childKey as string,
+    });
+    treeMap.set(tree.treeKey, tree);
+    return tree;
+  },
+};
