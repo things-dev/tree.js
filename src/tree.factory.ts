@@ -22,7 +22,9 @@ export const TreeFactory = {
       key,
       childKey: childKey as string,
     });
-    treeMap.set(tree.treeKey, tree);
+    if (!treeMap.has(tree.treeKey)) {
+      treeMap.set(tree.treeKey, tree);
+    }
     return tree;
   },
 };
