@@ -4,7 +4,9 @@
     "outDir": "./dist",
     "target": "esnext",
     "module": "esnext",
-    "sourceMap": true
+    "sourceMap": true,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "author": "Yuki Shimizu",
-  "main": "index.js",
+  "main": "dist/index.js",
   "description": "",
   "keywords": [
     "tree",
@@ -16,7 +16,7 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "build": "rm -rf ./dist/index.js && bun build ./src --outfile=./dist/index.js",
+    "build": "rm -rf ./dist/index.js && bun build ./src --outfile=./dist/index.js && tsc --emitDeclarationOnly",
     "typecheck": "tsc --pretty --noEmit",
     "format": "biome format ./src --write",
     "lint": "biome lint ./src",
@@ -30,9 +30,6 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "*.ts": [
-      "biome format --write",
-      "biome lint"
-    ]
+    "*.ts": ["biome format --write", "biome lint"]
   }
 }
