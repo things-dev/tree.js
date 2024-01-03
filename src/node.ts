@@ -1,4 +1,5 @@
-import { TreeType, treeMap } from "./tree";
+import { TreeType } from "./tree";
+import { treeMap } from "./tree.factory";
 
 export type NodeModel = {
   level: number;
