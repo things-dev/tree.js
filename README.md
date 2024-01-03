@@ -5,7 +5,7 @@ Simple Model for manipulating tree structure.
 ## Installation
 
 ```shell
-$ npm install @things/treejs
+npm install @thingsinc/treejs
 ```
 
 ## Usage
@@ -182,7 +182,13 @@ console.log(
 ### Test
 
 ```shell
-$ bun run test
+bun run test
+```
+
+### Release
+
+```shell
+bun run release
 ```
 
 ## License
