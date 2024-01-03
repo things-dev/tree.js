@@ -1,8 +1,7 @@
 {
-  "name": "tree-js",
-  "version": "1.0.0",
-  "type": "module",
+  "name": "@things/treejs",
   "author": "Yuki Shimizu",
+  "version": "0.1.0",
   "main": "dist/index.js",
   "description": "",
   "keywords": [
@@ -16,12 +15,13 @@
   "license": "MIT",
   "scripts": {
     "prepare": "husky install",
-    "build": "rm -rf ./dist/index.js && bun build ./src --outfile=./dist/index.js && tsc --emitDeclarationOnly",
+    "build": "rm -rf ./dist && bun build ./src --outfile=./dist/index.js && tsc --emitDeclarationOnly",
     "typecheck": "tsc --pretty --noEmit",
     "format": "biome format ./src --write",
     "check": "biome check ./src",
     "lint": "biome lint ./src",
-    "lint:fix": "biome lint --apply ./src"
+    "lint:fix": "biome lint --apply ./src",
+    "publish": "bun run build && cp package.json dist && cp LICENSE dist && npm publish ./src/dist --access public"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.4.1",
