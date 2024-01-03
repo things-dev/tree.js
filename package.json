@@ -19,6 +19,7 @@
     "build": "rm -rf ./dist/index.js && bun build ./src --outfile=./dist/index.js && tsc --emitDeclarationOnly",
     "typecheck": "tsc --pretty --noEmit",
     "format": "biome format ./src --write",
+    "check": "biome check ./src",
     "lint": "biome lint ./src",
     "lint:fix": "biome lint --apply ./src"
   },
