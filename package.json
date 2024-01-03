@@ -1,7 +1,7 @@
 {
   "name": "@thingsinc/treejs",
   "author": "Yuki Shimizu",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./cjs/index.js",
   "module": "./esm/index.js",
   "types": "./esm/index.d.ts",
@@ -37,9 +37,18 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "*.ts": ["biome format --write", "biome lint"]
+    "*.ts": [
+      "biome format --write",
+      "biome lint"
+    ]
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md",
+    "src"
+  ],
   "publishConfig": {
     "access": "public"
   }
