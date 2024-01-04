@@ -174,7 +174,7 @@ describe("Treejs", () => {
       },
     });
     expect(node.children).toHaveLength(3);
-    childNode.remove();
+    childNode.drop();
     expect(node.children).toHaveLength(2);
     expect(childNode).not.toBeUndefined();
     expect(childNode.level).toBe(1);

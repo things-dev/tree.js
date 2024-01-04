@@ -2,7 +2,7 @@ import { TreeType } from "./tree";
 import { treeMap } from "./tree.factory";
 
 export class Node<T> {
-  level: number; // root: 0
+  level: number; // root is 0
   parentKey: string | null;
   children: Node<T>[];
   data: T;
@@ -75,7 +75,7 @@ export class Node<T> {
     return newChildNode;
   }
 
-  remove() {
+  drop() {
     const parentNode = this.getParentNode();
     if (parentNode) {
       const index = parentNode.children.indexOf(this);
