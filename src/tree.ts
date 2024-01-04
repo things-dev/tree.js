@@ -55,7 +55,7 @@ export class Tree<T> {
     return targetNode;
   }
 
-  findAll(fn: (node: Node<T>) => boolean) {
+  findMany(fn: (node: Node<T>) => boolean) {
     const targetNodes: Node<T>[] = [];
     this.root.move((node) => {
       if (fn(node)) {

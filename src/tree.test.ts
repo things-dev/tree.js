@@ -108,8 +108,8 @@ describe("Treejs", () => {
     }).toThrow("Target node not found");
   });
 
-  test("findAll", () => {
-    const nodes = tree.findAll((node) => [1, 2, 3].includes(node.level));
+  test("findMany", () => {
+    const nodes = tree.findMany((node) => [1, 2, 3].includes(node.level));
     const levels = nodes.map((node) => node.level);
 
     expect(nodes).not.toBeUndefined();
