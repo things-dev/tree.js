@@ -5,7 +5,19 @@ Simple Model for manipulating tree structure.
 ## Installation
 
 ```shell
+bun install @thingsinc/treejs
+```
+
+```shell
+pnpm install @thingsinc/treejs
+```
+
+```shell
 npm install @thingsinc/treejs
+```
+
+```shell
+yarn add @thingsinc/treejs
 ```
 
 ## Usage
