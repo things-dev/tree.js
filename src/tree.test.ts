@@ -147,6 +147,26 @@ describe("Treejs", () => {
     expect(node.hasParent).toBe(true);
   });
 
+  test("findDescendantNodes", () => {
+    const node = tree.find((node) => node.level === 0);
+    const descendants = node.findDescendantNodes((node) => node.level === 3);
+    const levels = descendants.map((node) => node.level);
+
+    expect(descendants).not.toBeUndefined();
+    expect(descendants.length).toBe(1);
+    expect(levels).toContain(3);
+  });
+
+  test("findParentNodes", () => {
+    const node = tree.find((node) => node.level === 3);
+    const parents = node.findParentNodes((node) => node.level === 1);
+    const levels = parents.map((node) => node.level);
+
+    expect(parents).not.toBeUndefined();
+    expect(parents.length).toBe(1);
+    expect(levels).toContain(1);
+  });
+
   test("addChild", () => {
     const node = tree.find((node) => node.level === 0);
     const childNode = node.addChild({

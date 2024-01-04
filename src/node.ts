@@ -61,6 +61,32 @@ export class Node<T> {
     return true;
   }
 
+  findDescendantNodes(fn: (node: Node<T>) => boolean) {
+    const results: Node<T>[] = [];
+    for (const child of this.children) {
+      const isContinue = fn(child);
+      if (isContinue) {
+        results.push(child);
+      }
+      const childDescendants = child.findDescendantNodes(fn);
+      results.push(...childDescendants);
+    }
+    return results;
+  }
+
+  findParentNodes(fn: (node: Node<T>) => boolean) {
+    const parentNodes: Node<T>[] = [];
+    let parentNode = this.getParentNode();
+    while (parentNode) {
+      const isContinue = fn(parentNode);
+      if (isContinue) {
+        parentNodes.push(parentNode);
+      }
+      parentNode = parentNode.getParentNode();
+    }
+    return parentNodes;
+  }
+
   addChild({ data }: { data: T }) {
     const newChildNode = new Node<T>({
       treeKey: this.#treeKey,
