@@ -184,6 +184,21 @@ console.log(
 */
 ```
 
+## Features
+
+### Tree
+
+#### `Tree#find`
+
+The find() method of Tree instances returns the first Node in the provided tree that satisfies the provided testing function. If no values satisfy the testing function, undefined is returned.
+
+#### `Tree#findOrThrow`
+
+The findOrThrow() method of Tree instances returns the first Node in the provided tree that satisfies the provided testing function. If no values satisfy the testing function, Error is returned.
+
+#### `Tree#findMany`
+
+The findMany() method of Tree instances returns the all Node in the provided tree that satisfies the provided testing function. If no values satisfy the testing function, empty array is returned.
 ## Contribution
 
 ### Setup
