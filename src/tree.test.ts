@@ -77,7 +77,7 @@ const nodes: Nodes = [
 
 describe("Treejs", () => {
   const tree = TreeFactory.build({
-    nodes,
+    nodes: structuredClone(nodes),
     key: "nodeKey",
     childKey: "childNodeKey",
   });
@@ -218,5 +218,25 @@ describe("Treejs", () => {
 
     expect(path).not.toBeUndefined();
     expect(path).toBe("root/child1/child2");
+  });
+
+  test("Two trees can be generated at the same time", () => {
+    const tree2 = TreeFactory.build({
+      nodes: structuredClone(nodes),
+      key: "nodeKey",
+      childKey: "childNodeKey",
+    });
+
+    expect(tree).not.toBeUndefined();
+    expect(tree2).not.toBeUndefined();
+    expect(tree).not.toBe(tree2);
+
+    tree2.find((node) => node.data.nodeKey === "child2").drop();
+    expect(
+      tree2.find((node) => node.data.nodeKey === "child2"),
+    ).toBeUndefined();
+    expect(
+      tree.find((node) => node.data.nodeKey === "child2"),
+    ).not.toBeUndefined();
   });
 });
