@@ -37,6 +37,30 @@ export class Node {
         }
         return true;
     }
+    findDescendantNodes(fn) {
+        const results = [];
+        for (const child of this.children) {
+            const isContinue = fn(child);
+            if (isContinue) {
+                results.push(child);
+            }
+            const childDescendants = child.findDescendantNodes(fn);
+            results.push(...childDescendants);
+        }
+        return results;
+    }
+    findParentNodes(fn) {
+        const parentNodes = [];
+        let parentNode = this.getParentNode();
+        while (parentNode) {
+            const isContinue = fn(parentNode);
+            if (isContinue) {
+                parentNodes.push(parentNode);
+            }
+            parentNode = parentNode.getParentNode();
+        }
+        return parentNodes;
+    }
     addChild({ data }) {
         const newChildNode = new Node({
             treeKey: this.#treeKey,
@@ -50,7 +74,7 @@ export class Node {
         this.children.push(newChildNode);
         return newChildNode;
     }
-    remove() {
+    drop() {
         const parentNode = this.getParentNode();
         if (parentNode) {
             const index = parentNode.children.indexOf(this);

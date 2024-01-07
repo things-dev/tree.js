@@ -27,12 +27,14 @@ export declare class Node<T> {
     data?: T;
   });
   move(fn: (node: Node<T>) => boolean): boolean;
+  findDescendantNodes(fn: (node: Node<T>) => boolean): Node<T>[];
+  findParentNodes(fn: (node: Node<T>) => boolean): Node<T>[];
   addChild({
     data,
   }: {
     data: T;
   }): Node<T>;
-  remove(): void;
+  drop(): void;
   getParentNode(): Node<T>;
   getAncestorNodes(): Node<T>[];
   getPath(key: string): string;

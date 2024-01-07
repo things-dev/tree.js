@@ -66,7 +66,7 @@ const nodes = [
 ];
 (0, bun_test_1.describe)("Treejs", () => {
     const tree = tree_factory_1.TreeFactory.build({
-        nodes,
+        nodes: structuredClone(nodes),
         key: "nodeKey",
         childKey: "childNodeKey",
     });
@@ -89,8 +89,8 @@ const nodes = [
             tree.findOrThrow((node) => node.level === 4);
         }).toThrow("Target node not found");
     });
-    (0, bun_test_1.test)("findAll", () => {
-        const nodes = tree.findAll((node) => [1, 2, 3].includes(node.level));
+    (0, bun_test_1.test)("findMany", () => {
+        const nodes = tree.findMany((node) => [1, 2, 3].includes(node.level));
         const levels = nodes.map((node) => node.level);
         (0, bun_test_1.expect)(nodes).not.toBeUndefined();
         (0, bun_test_1.expect)(nodes.length).toBe(3);
@@ -118,6 +118,22 @@ const nodes = [
         (0, bun_test_1.expect)(node).not.toBeUndefined();
         (0, bun_test_1.expect)(node.hasParent).toBe(true);
     });
+    (0, bun_test_1.test)("findDescendantNodes", () => {
+        const node = tree.find((node) => node.level === 0);
+        const descendants = node.findDescendantNodes((node) => node.level === 3);
+        const levels = descendants.map((node) => node.level);
+        (0, bun_test_1.expect)(descendants).not.toBeUndefined();
+        (0, bun_test_1.expect)(descendants.length).toBe(1);
+        (0, bun_test_1.expect)(levels).toContain(3);
+    });
+    (0, bun_test_1.test)("findParentNodes", () => {
+        const node = tree.find((node) => node.level === 3);
+        const parents = node.findParentNodes((node) => node.level === 1);
+        const levels = parents.map((node) => node.level);
+        (0, bun_test_1.expect)(parents).not.toBeUndefined();
+        (0, bun_test_1.expect)(parents.length).toBe(1);
+        (0, bun_test_1.expect)(levels).toContain(1);
+    });
     (0, bun_test_1.test)("addChild", () => {
         const node = tree.find((node) => node.level === 0);
         const childNode = node.addChild({
@@ -143,7 +159,7 @@ const nodes = [
             },
         });
         (0, bun_test_1.expect)(node.children).toHaveLength(3);
-        childNode.remove();
+        childNode.drop();
         (0, bun_test_1.expect)(node.children).toHaveLength(2);
         (0, bun_test_1.expect)(childNode).not.toBeUndefined();
         (0, bun_test_1.expect)(childNode.level).toBe(1);
@@ -163,6 +179,19 @@ const nodes = [
         const path = node.getPath("nodeKey");
         (0, bun_test_1.expect)(path).not.toBeUndefined();
         (0, bun_test_1.expect)(path).toBe("root/child1/child2");
+    });
+    (0, bun_test_1.test)("Two trees can be generated at the same time", () => {
+        const tree2 = tree_factory_1.TreeFactory.build({
+            nodes: structuredClone(nodes),
+            key: "nodeKey",
+            childKey: "childNodeKey",
+        });
+        (0, bun_test_1.expect)(tree).not.toBeUndefined();
+        (0, bun_test_1.expect)(tree2).not.toBeUndefined();
+        (0, bun_test_1.expect)(tree).not.toBe(tree2);
+        tree2.find((node) => node.data.nodeKey === "child2").drop();
+        (0, bun_test_1.expect)(tree2.find((node) => node.data.nodeKey === "child2")).toBeUndefined();
+        (0, bun_test_1.expect)(tree.find((node) => node.data.nodeKey === "child2")).not.toBeUndefined();
     });
 });
 //# sourceMappingURL=tree.test.js.map

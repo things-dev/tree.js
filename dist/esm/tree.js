@@ -32,7 +32,7 @@ export class Tree {
         }
         return targetNode;
     }
-    findAll(fn) {
+    findMany(fn) {
         const targetNodes = [];
         this.root.move((node) => {
             if (fn(node)) {

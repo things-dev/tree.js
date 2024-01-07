@@ -64,7 +64,7 @@ const nodes = [
 ];
 describe("Treejs", () => {
     const tree = TreeFactory.build({
-        nodes,
+        nodes: structuredClone(nodes),
         key: "nodeKey",
         childKey: "childNodeKey",
     });
@@ -87,8 +87,8 @@ describe("Treejs", () => {
             tree.findOrThrow((node) => node.level === 4);
         }).toThrow("Target node not found");
     });
-    test("findAll", () => {
-        const nodes = tree.findAll((node) => [1, 2, 3].includes(node.level));
+    test("findMany", () => {
+        const nodes = tree.findMany((node) => [1, 2, 3].includes(node.level));
         const levels = nodes.map((node) => node.level);
         expect(nodes).not.toBeUndefined();
         expect(nodes.length).toBe(3);
@@ -116,6 +116,22 @@ describe("Treejs", () => {
         expect(node).not.toBeUndefined();
         expect(node.hasParent).toBe(true);
     });
+    test("findDescendantNodes", () => {
+        const node = tree.find((node) => node.level === 0);
+        const descendants = node.findDescendantNodes((node) => node.level === 3);
+        const levels = descendants.map((node) => node.level);
+        expect(descendants).not.toBeUndefined();
+        expect(descendants.length).toBe(1);
+        expect(levels).toContain(3);
+    });
+    test("findParentNodes", () => {
+        const node = tree.find((node) => node.level === 3);
+        const parents = node.findParentNodes((node) => node.level === 1);
+        const levels = parents.map((node) => node.level);
+        expect(parents).not.toBeUndefined();
+        expect(parents.length).toBe(1);
+        expect(levels).toContain(1);
+    });
     test("addChild", () => {
         const node = tree.find((node) => node.level === 0);
         const childNode = node.addChild({
@@ -141,7 +157,7 @@ describe("Treejs", () => {
             },
         });
         expect(node.children).toHaveLength(3);
-        childNode.remove();
+        childNode.drop();
         expect(node.children).toHaveLength(2);
         expect(childNode).not.toBeUndefined();
         expect(childNode.level).toBe(1);
@@ -161,6 +177,19 @@ describe("Treejs", () => {
         const path = node.getPath("nodeKey");
         expect(path).not.toBeUndefined();
         expect(path).toBe("root/child1/child2");
+    });
+    test("Two trees can be generated at the same time", () => {
+        const tree2 = TreeFactory.build({
+            nodes: structuredClone(nodes),
+            key: "nodeKey",
+            childKey: "childNodeKey",
+        });
+        expect(tree).not.toBeUndefined();
+        expect(tree2).not.toBeUndefined();
+        expect(tree).not.toBe(tree2);
+        tree2.find((node) => node.data.nodeKey === "child2").drop();
+        expect(tree2.find((node) => node.data.nodeKey === "child2")).toBeUndefined();
+        expect(tree.find((node) => node.data.nodeKey === "child2")).not.toBeUndefined();
     });
 });
 //# sourceMappingURL=tree.test.js.map

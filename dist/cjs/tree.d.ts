@@ -24,6 +24,6 @@ export declare class Tree<T> {
   });
   find(fn: (node: Node<T>) => boolean): Node<T>;
   findOrThrow(fn: (node: Node<T>) => boolean): Node<T>;
-  findAll(fn: (node: Node<T>) => boolean): Node<T>[];
+  findMany(fn: (node: Node<T>) => boolean): Node<T>[];
 }
 //# sourceMappingURL=tree.d.ts.map
