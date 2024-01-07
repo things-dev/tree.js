@@ -1,6 +1,7 @@
 # Tree.js
 
 Simple Model for manipulating tree structure.
+This works with both browser and server side runtime.
 
 ## Installation
 
