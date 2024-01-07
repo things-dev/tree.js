@@ -13,8 +13,8 @@ exports.TreeFactory = {
             key,
             childKey,
         });
-        if (!exports.treeMap.has(tree.treeKey)) {
-            exports.treeMap.set(tree.treeKey, tree);
+        if (!exports.treeMap.has(tree.treeId)) {
+            exports.treeMap.set(tree.treeId, tree);
         }
         return tree;
     },

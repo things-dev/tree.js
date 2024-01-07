@@ -1,10 +1,11 @@
+import { randomUUID } from "crypto";
 import { Node } from "./node";
 export class Tree {
-    treeKey;
+    treeId;
     root;
     constructor({ nodes, key, childKey, }) {
-        this.treeKey = Date.now().toString() + Math.random().toString();
-        const nodeModel = this.#buildParams({
+        this.treeId = randomUUID();
+        const nodeParam = this.#buildParams({
             nodes,
             key,
             childKey,
@@ -12,7 +13,7 @@ export class Tree {
         this.root = this.#parse({
             key,
             childKey,
-            nodeModel,
+            nodeParam,
         });
     }
     find(fn) {
@@ -122,19 +123,19 @@ export class Tree {
         };
         return rootNode;
     }
-    #parse({ key, childKey, nodeModel, }) {
+    #parse({ key, childKey, nodeParam, }) {
         const node = new Node({
-            treeKey: this.treeKey,
+            treeId: this.treeId,
             key,
             childKey,
-            level: nodeModel.level,
-            parentKey: nodeModel.parentKey,
-            children: nodeModel.children.map((childNodeModel) => this.#parse({
+            level: nodeParam.level,
+            parentKey: nodeParam.parentKey,
+            children: nodeParam.children.map((childNodeModel) => this.#parse({
                 key,
                 childKey,
-                nodeModel: childNodeModel,
+                nodeParam: childNodeModel,
             })),
-            data: nodeModel.data,
+            data: nodeParam.data,
         });
         return node;
     }

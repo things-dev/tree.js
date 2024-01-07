@@ -8,7 +8,7 @@ export type NodeParam<T> = {
 export type TreeType<T> = Tree<T>;
 export declare class Tree<T> {
   #private;
-  treeKey: string;
+  treeId: string;
   root: Node<T>;
   constructor({
     nodes,

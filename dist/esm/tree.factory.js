@@ -10,8 +10,8 @@ export const TreeFactory = {
             key,
             childKey,
         });
-        if (!treeMap.has(tree.treeKey)) {
-            treeMap.set(tree.treeKey, tree);
+        if (!treeMap.has(tree.treeId)) {
+            treeMap.set(tree.treeId, tree);
         }
         return tree;
     },

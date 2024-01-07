@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Tree = void 0;
+const crypto_1 = require("crypto");
 const node_1 = require("./node");
 class Tree {
-    treeKey;
+    treeId;
     root;
     constructor({ nodes, key, childKey, }) {
-        this.treeKey = Date.now().toString() + Math.random().toString();
-        const nodeModel = this.#buildParams({
+        this.treeId = (0, crypto_1.randomUUID)();
+        const nodeParam = this.#buildParams({
             nodes,
             key,
             childKey,
@@ -15,7 +16,7 @@ class Tree {
         this.root = this.#parse({
             key,
             childKey,
-            nodeModel,
+            nodeParam,
         });
     }
     find(fn) {
@@ -125,19 +126,19 @@ class Tree {
         };
         return rootNode;
     }
-    #parse({ key, childKey, nodeModel, }) {
+    #parse({ key, childKey, nodeParam, }) {
         const node = new node_1.Node({
-            treeKey: this.treeKey,
+            treeId: this.treeId,
             key,
             childKey,
-            level: nodeModel.level,
-            parentKey: nodeModel.parentKey,
-            children: nodeModel.children.map((childNodeModel) => this.#parse({
+            level: nodeParam.level,
+            parentKey: nodeParam.parentKey,
+            children: nodeParam.children.map((childNodeModel) => this.#parse({
                 key,
                 childKey,
-                nodeModel: childNodeModel,
+                nodeParam: childNodeModel,
             })),
-            data: nodeModel.data,
+            data: nodeParam.data,
         });
         return node;
     }
