@@ -11,12 +11,12 @@ export class Node<T> {
   hasParent: boolean;
   hasChildren: boolean;
 
-  #treeKey: string;
+  #treeId: string;
   #key: string;
   #childKey: string;
 
   constructor({
-    treeKey,
+    treeId,
     key,
     childKey,
     level,
@@ -24,7 +24,7 @@ export class Node<T> {
     children,
     data,
   }: {
-    treeKey: string;
+    treeId: string;
     key: string;
     childKey: string;
     level: number;
@@ -41,7 +41,7 @@ export class Node<T> {
     this.hasParent = !this.isRoot;
     this.hasChildren = !this.isLeaf;
 
-    this.#treeKey = treeKey;
+    this.#treeId = treeId;
     this.#key = key;
     this.#childKey = childKey;
   }
@@ -89,7 +89,7 @@ export class Node<T> {
 
   addChild({ data }: { data: T }) {
     const newChildNode = new Node<T>({
-      treeKey: this.#treeKey,
+      treeId: this.#treeId,
       key: this.#key,
       childKey: this.#childKey,
       level: this.level + 1,
@@ -133,7 +133,7 @@ export class Node<T> {
   }
 
   getTree() {
-    const tree = treeMap.get(this.#treeKey) as TreeType<T>;
+    const tree = treeMap.get(this.#treeId) as TreeType<T>;
     return tree;
   }
 }

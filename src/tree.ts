@@ -10,7 +10,7 @@ export type NodeParam<T> = {
 export type TreeType<T> = Tree<T>;
 
 export class Tree<T> {
-  treeKey: string;
+  treeId: string;
   root: Node<T>;
 
   constructor({
@@ -22,8 +22,8 @@ export class Tree<T> {
     key: string;
     childKey: string;
   }) {
-    this.treeKey = Date.now().toString() + Math.random().toString();
-    const nodeModel = this.#buildParams({
+    this.treeId = Date.now().toString() + Math.random().toString();
+    const nodeParam = this.#buildParams({
       nodes,
       key,
       childKey,
@@ -32,7 +32,7 @@ export class Tree<T> {
     this.root = this.#parse({
       key,
       childKey,
-      nodeModel,
+      nodeParam,
     });
   }
 
@@ -190,26 +190,26 @@ export class Tree<T> {
   #parse({
     key,
     childKey,
-    nodeModel,
+    nodeParam,
   }: {
     key: string;
     childKey: string;
-    nodeModel: NodeParam<T>;
+    nodeParam: NodeParam<T>;
   }) {
     const node = new Node<T>({
-      treeKey: this.treeKey,
+      treeId: this.treeId,
       key,
       childKey,
-      level: nodeModel.level,
-      parentKey: nodeModel.parentKey,
-      children: nodeModel.children.map((childNodeModel) =>
+      level: nodeParam.level,
+      parentKey: nodeParam.parentKey,
+      children: nodeParam.children.map((childNodeModel) =>
         this.#parse({
           key,
           childKey,
-          nodeModel: childNodeModel,
+          nodeParam: childNodeModel,
         }),
       ),
-      data: nodeModel.data,
+      data: nodeParam.data,
     });
 
     return node;
