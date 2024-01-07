@@ -1,3 +1,5 @@
+import { randomUUID } from "crypto";
+
 import { Node } from "./node";
 
 export type NodeParam<T> = {
@@ -22,7 +24,7 @@ export class Tree<T> {
     key: string;
     childKey: string;
   }) {
-    this.treeId = Date.now().toString() + Math.random().toString();
+    this.treeId = randomUUID();
     const nodeParam = this.#buildParams({
       nodes,
       key,
