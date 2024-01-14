@@ -2,16 +2,20 @@ import { randomUUID } from "crypto";
 
 import { Node } from "./node";
 
-export type NodeParam<T> = {
+export type Data = {
+  [key: string]: unknown;
+};
+
+export type NodeParam<T extends Data> = {
   level: number;
   data: T;
   parentKey: string | null;
   children: NodeParam<T>[];
 };
 
-export type TreeType<T> = Tree<T>;
+export type TreeType<T extends Data> = Tree<T>;
 
-export class Tree<T> {
+export class Tree<T extends Data> {
   treeId: string;
   root: Node<T>;
 
@@ -69,7 +73,7 @@ export class Tree<T> {
     return targetNodes;
   }
 
-  #buildParams<T>({
+  #buildParams<T extends Data>({
     nodes,
     key,
     childKey,
@@ -93,7 +97,7 @@ export class Tree<T> {
 
     // Store node with a specific key as a child in nodeMap
     for (const node of nodes) {
-      const targetKey = node.data[key];
+      const targetKey = node.data[key] as string;
 
       if (!nodeMap.has(targetKey)) {
         nodeMap.set(targetKey, []);
@@ -111,7 +115,7 @@ export class Tree<T> {
 
       if (!node.data[childKey]) {
         const targetNode = nodeMap
-          .get(node.data[key])
+          .get(node.data[key] as string)
           .find(
             (targetNode) =>
               targetNode.level === node.level &&
@@ -126,13 +130,13 @@ export class Tree<T> {
             parentNode.data[childKey] === targetNode.data[key],
         );
         if (parentNode) {
-          targetNode.parentKey = parentNode.data[key];
+          targetNode.parentKey = parentNode.data[key] as string;
         }
         continue;
       }
 
       const childNode = nodeMap
-        .get(node.data[childKey])
+        .get(node.data[childKey] as string)
         .find(
           (targetNode) =>
             targetNode.level - 1 === node.level &&
@@ -143,7 +147,7 @@ export class Tree<T> {
         nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
       } else {
         const targetNode = nodeMap
-          .get(node.data[key])
+          .get(node.data[key] as string)
           .find(
             (targetNode) =>
               targetNode.level + 1 === childNode.level &&
@@ -167,7 +171,7 @@ export class Tree<T> {
             targetNode.parentKey === null,
         );
         if (parentNode) {
-          targetNode.parentKey = parentNode.data[key];
+          targetNode.parentKey = parentNode.data[key] as string;
         }
       }
     }
@@ -213,12 +217,12 @@ export class Tree<T> {
         }),
       ),
       data: nodeParam.data,
-    });
+    }) as Node<T>;
 
     return node;
   }
 
-  #removeChildKeyFromObj<T>(node: NodeParam<T>, childKey: string) {
+  #removeChildKeyFromObj<T extends Data>(node: NodeParam<T>, childKey: string) {
     delete node.data[childKey];
     return node;
   }

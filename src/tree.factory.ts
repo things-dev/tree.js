@@ -1,13 +1,13 @@
-import { Tree, TreeType } from "./tree";
+import { Tree, type Data } from "./tree";
 
 /*
  *  Bridge to reference a Tree from a specific Node.
  *  If every node has a tree, the data will be more than necessary.
  */
-export const treeMap = new Map<string, TreeType<unknown>>();
+export const treeMap = new Map<string, unknown>();
 
 export const TreeFactory = {
-  build<T, K extends keyof T>({
+  build<T extends Data, K extends keyof T>({
     nodes,
     key,
     childKey,

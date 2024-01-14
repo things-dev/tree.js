@@ -1,7 +1,7 @@
-import { TreeType } from "./tree";
+import { type TreeType, Data } from "./tree";
 import { treeMap } from "./tree.factory";
 
-export class Node<T> {
+export class Node<T extends Data> {
   level: number; // root is 0
   parentKey: string | null;
   children: Node<T>[];
@@ -93,7 +93,7 @@ export class Node<T> {
       key: this.#key,
       childKey: this.#childKey,
       level: this.level + 1,
-      parentKey: this.data[this.#key],
+      parentKey: this.data[this.#key] as string,
       children: [],
       data,
     });
@@ -127,12 +127,12 @@ export class Node<T> {
     return ancestors;
   }
 
-  getPath(key: string) {
+  getPath(key: string): string {
     const ancestors = this.getAncestorNodes();
     return ancestors.map((ancestor) => ancestor.data[key]).join("/");
   }
 
-  getTree() {
+  getTree(): TreeType<T> {
     const tree = treeMap.get(this.#treeId) as TreeType<T>;
     return tree;
   }
