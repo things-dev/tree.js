@@ -46,7 +46,7 @@ export class Node<T> {
     this.#childKey = childKey;
   }
 
-  move(fn: (node: Node<T>) => boolean) {
+  move(fn: (node: Node<T>) => boolean): boolean {
     const isContinue = !!fn(this);
 
     for (const child of this.children) {
@@ -61,7 +61,7 @@ export class Node<T> {
     return true;
   }
 
-  findDescendantNodes(fn: (node: Node<T>) => boolean) {
+  findDescendantNodes(fn: (node: Node<T>) => boolean): Node<T>[] {
     const results: Node<T>[] = [];
     for (const child of this.children) {
       const isContinue = fn(child);
@@ -74,7 +74,7 @@ export class Node<T> {
     return results;
   }
 
-  findParentNodes(fn: (node: Node<T>) => boolean) {
+  findParentNodes(fn: (node: Node<T>) => boolean): Node<T>[] {
     const parentNodes: Node<T>[] = [];
     let parentNode = this.getParentNode();
     while (parentNode) {
@@ -87,7 +87,7 @@ export class Node<T> {
     return parentNodes;
   }
 
-  addChild({ data }: { data: T }) {
+  addChild({ data }: { data: T }): Node<T> {
     const newChildNode = new Node<T>({
       treeId: this.#treeId,
       key: this.#key,
@@ -101,7 +101,7 @@ export class Node<T> {
     return newChildNode;
   }
 
-  drop() {
+  drop(): void {
     const parentNode = this.getParentNode();
     if (parentNode) {
       const index = parentNode.children.indexOf(this);
@@ -109,7 +109,7 @@ export class Node<T> {
     }
   }
 
-  getParentNode() {
+  getParentNode(): Node<T> | undefined {
     const tree = this.getTree();
     const parentNode = tree.find(
       (node) => node.data[this.#key] === this.parentKey,
@@ -117,7 +117,7 @@ export class Node<T> {
     return parentNode;
   }
 
-  getAncestorNodes() {
+  getAncestorNodes(): Node<T>[] {
     const ancestors: Node<T>[] = [];
     let ancestor = this.getParentNode();
     while (ancestor) {

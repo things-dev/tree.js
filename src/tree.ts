@@ -38,8 +38,8 @@ export class Tree<T> {
     });
   }
 
-  find(fn: (node: Node<T>) => boolean) {
-    let targetNode: Node<T> | null = null;
+  find(fn: (node: Node<T>) => boolean): Node<T> | undefined {
+    let targetNode: Node<T> | undefined = undefined;
     this.root.move((node) => {
       if (fn(node)) {
         targetNode = node;
@@ -50,7 +50,7 @@ export class Tree<T> {
     return targetNode;
   }
 
-  findOrThrow(fn: (node: Node<T>) => boolean) {
+  findOrThrow(fn: (node: Node<T>) => boolean): Node<T> {
     const targetNode = this.find(fn);
     if (!targetNode) {
       throw new Error("Target node not found");
@@ -58,7 +58,7 @@ export class Tree<T> {
     return targetNode;
   }
 
-  findMany(fn: (node: Node<T>) => boolean) {
+  findMany(fn: (node: Node<T>) => boolean): Node<T>[] {
     const targetNodes: Node<T>[] = [];
     this.root.move((node) => {
       if (fn(node)) {
