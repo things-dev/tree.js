@@ -21,7 +21,9 @@
     "build": "rm -rf dist && bun run build:cjs && bun run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "typecheck": "tsc --pretty --noEmit",
+    "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json",
+    "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
+    "typecheck": "bun run typecheck:esm && bun run typecheck:cjs",
     "format": "biome format ./src --write",
     "check": "biome check ./src",
     "lint": "biome lint ./src",
@@ -37,18 +39,9 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "*.ts": [
-      "biome format --write",
-      "biome lint"
-    ]
+    "*.ts": ["biome format --write", "biome lint"]
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md",
-    "src"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
   "publishConfig": {
     "access": "public"
   }
