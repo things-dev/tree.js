@@ -39,12 +39,13 @@ export class Tree<T> {
   }
 
   find(fn: (node: Node<T>) => boolean) {
-    let targetNode: Node<T>;
+    let targetNode: Node<T> | null = null;
     this.root.move((node) => {
       if (fn(node)) {
         targetNode = node;
         return false;
       }
+      return true;
     });
     return targetNode;
   }
