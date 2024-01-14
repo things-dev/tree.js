@@ -24,7 +24,7 @@ export declare class Node<T> {
     level: number;
     parentKey: string | null;
     children: Node<T>[];
-    data?: T;
+    data: T;
   });
   move(fn: (node: Node<T>) => boolean): boolean;
   findDescendantNodes(fn: (node: Node<T>) => boolean): Node<T>[];
