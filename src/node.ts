@@ -30,7 +30,7 @@ export class Node<T> {
     level: number;
     parentKey: string | null;
     children: Node<T>[];
-    data?: T;
+    data: T;
   }) {
     this.level = level;
     this.parentKey = parentKey;
