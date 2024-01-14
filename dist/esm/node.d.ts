@@ -35,7 +35,7 @@ export declare class Node<T> {
     data: T;
   }): Node<T>;
   drop(): void;
-  getParentNode(): Node<T>;
+  getParentNode(): Node<T> | undefined;
   getAncestorNodes(): Node<T>[];
   getPath(key: string): string;
   getTree(): TreeType<T>;

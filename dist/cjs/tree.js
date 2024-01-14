@@ -20,12 +20,13 @@ class Tree {
         });
     }
     find(fn) {
-        let targetNode;
+        let targetNode = undefined;
         this.root.move((node) => {
             if (fn(node)) {
                 targetNode = node;
                 return false;
             }
+            return true;
         });
         return targetNode;
     }

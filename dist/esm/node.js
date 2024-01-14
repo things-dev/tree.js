@@ -27,8 +27,8 @@ export class Node {
     move(fn) {
         const isContinue = !!fn(this);
         for (const child of this.children) {
-            const childContinue = child.move(fn);
-            if (!childContinue) {
+            const isChildContinue = child.move(fn);
+            if (!isChildContinue) {
                 return false;
             }
         }

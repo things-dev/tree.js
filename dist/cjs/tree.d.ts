@@ -22,7 +22,7 @@ export declare class Tree<T> {
     key: string;
     childKey: string;
   });
-  find(fn: (node: Node<T>) => boolean): Node<T>;
+  find(fn: (node: Node<T>) => boolean): Node<T> | undefined;
   findOrThrow(fn: (node: Node<T>) => boolean): Node<T>;
   findMany(fn: (node: Node<T>) => boolean): Node<T>[];
 }
