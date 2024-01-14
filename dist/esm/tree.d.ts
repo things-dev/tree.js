@@ -1,12 +1,15 @@
 import { Node } from "./node";
-export type NodeParam<T> = {
+export type Data = {
+  [key: string]: unknown;
+};
+export type NodeParam<T extends Data> = {
   level: number;
   data: T;
   parentKey: string | null;
   children: NodeParam<T>[];
 };
-export type TreeType<T> = Tree<T>;
-export declare class Tree<T> {
+export type TreeType<T extends Data> = Tree<T>;
+export declare class Tree<T extends Data> {
   #private;
   treeId: string;
   root: Node<T>;

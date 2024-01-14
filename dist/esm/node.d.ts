@@ -1,5 +1,5 @@
-import { TreeType } from "./tree";
-export declare class Node<T> {
+import { type TreeType, Data } from "./tree";
+export declare class Node<T extends Data> {
   #private;
   level: number;
   parentKey: string | null;
