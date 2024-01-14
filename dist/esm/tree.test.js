@@ -71,7 +71,7 @@ describe("Treejs", () => {
     test("find", () => {
         const node = tree.find((node) => node.level === 3);
         expect(node).not.toBeUndefined();
-        expect(node.level).toBe(3);
+        expect(node?.level).toBe(3);
     });
     test("find (return undefined)", () => {
         const node = tree.find((node) => node.level === 10000);
@@ -80,7 +80,7 @@ describe("Treejs", () => {
     test("findOrThrow", () => {
         const node = tree.find((node) => node.level === 3);
         expect(node).not.toBeUndefined();
-        expect(node.level).toBe(3);
+        expect(node?.level).toBe(3);
     });
     test("findOrThrow (throw Error)", () => {
         expect(() => {
@@ -99,42 +99,42 @@ describe("Treejs", () => {
     test("isRoot", () => {
         const node = tree.find((node) => node.level === 0);
         expect(node).not.toBeUndefined();
-        expect(node.isRoot).toBe(true);
+        expect(node?.isRoot).toBe(true);
     });
     test("isLeaf", () => {
         const node = tree.find((node) => node.level === 3);
         expect(node).not.toBeUndefined();
-        expect(node.isLeaf).toBe(true);
+        expect(node?.isLeaf).toBe(true);
     });
     test("hasChildren", () => {
         const node = tree.find((node) => node.level === 0);
         expect(node).not.toBeUndefined();
-        expect(node.hasChildren).toBe(true);
+        expect(node?.hasChildren).toBe(true);
     });
     test("hasParent", () => {
         const node = tree.find((node) => node.level === 3);
         expect(node).not.toBeUndefined();
-        expect(node.hasParent).toBe(true);
+        expect(node?.hasParent).toBe(true);
     });
     test("findDescendantNodes", () => {
         const node = tree.find((node) => node.level === 0);
-        const descendants = node.findDescendantNodes((node) => node.level === 3);
-        const levels = descendants.map((node) => node.level);
+        const descendants = node?.findDescendantNodes((node) => node.level === 3);
+        const levels = descendants?.map((node) => node.level);
         expect(descendants).not.toBeUndefined();
-        expect(descendants.length).toBe(1);
+        expect(descendants?.length).toBe(1);
         expect(levels).toContain(3);
     });
     test("findParentNodes", () => {
         const node = tree.find((node) => node.level === 3);
-        const parents = node.findParentNodes((node) => node.level === 1);
-        const levels = parents.map((node) => node.level);
+        const parents = node?.findParentNodes((node) => node.level === 1);
+        const levels = parents?.map((node) => node.level);
         expect(parents).not.toBeUndefined();
-        expect(parents.length).toBe(1);
+        expect(parents?.length).toBe(1);
         expect(levels).toContain(1);
     });
     test("addChild", () => {
         const node = tree.find((node) => node.level === 0);
-        const childNode = node.addChild({
+        const childNode = node?.addChild({
             data: {
                 nodeKey: "child4",
                 someProperty: {
@@ -143,12 +143,12 @@ describe("Treejs", () => {
             },
         });
         expect(childNode).not.toBeUndefined();
-        expect(childNode.level).toBe(1);
+        expect(childNode?.level).toBe(1);
     });
     test("remove", () => {
         const node = tree.find((node) => node.level === 0);
-        expect(node.children).toHaveLength(2);
-        const childNode = node.addChild({
+        expect(node?.children).toHaveLength(2);
+        const childNode = node?.addChild({
             data: {
                 nodeKey: "child4",
                 someProperty: {
@@ -156,25 +156,25 @@ describe("Treejs", () => {
                 },
             },
         });
-        expect(node.children).toHaveLength(3);
-        childNode.drop();
-        expect(node.children).toHaveLength(2);
+        expect(node?.children).toHaveLength(3);
+        childNode?.drop();
+        expect(node?.children).toHaveLength(2);
         expect(childNode).not.toBeUndefined();
-        expect(childNode.level).toBe(1);
+        expect(childNode?.level).toBe(1);
     });
     test("getAncestorNodes", () => {
         const node = tree.find((node) => node.level === 3);
-        const ancestors = node.getAncestorNodes();
-        const levels = ancestors.map((node) => node.level);
+        const ancestors = node?.getAncestorNodes();
+        const levels = ancestors?.map((node) => node.level);
         expect(ancestors).not.toBeUndefined();
-        expect(ancestors.length).toBe(3);
+        expect(ancestors?.length).toBe(3);
         expect(levels).toContain(0);
         expect(levels).toContain(1);
         expect(levels).toContain(2);
     });
     test("getPath", () => {
         const node = tree.find((node) => node.level === 3);
-        const path = node.getPath("nodeKey");
+        const path = node?.getPath("nodeKey");
         expect(path).not.toBeUndefined();
         expect(path).toBe("root/child1/child2");
     });
@@ -187,7 +187,7 @@ describe("Treejs", () => {
         expect(tree).not.toBeUndefined();
         expect(tree2).not.toBeUndefined();
         expect(tree).not.toBe(tree2);
-        tree2.find((node) => node.data.nodeKey === "child2").drop();
+        tree2.find((node) => node.data.nodeKey === "child2")?.drop();
         expect(tree2.find((node) => node.data.nodeKey === "child2")).toBeUndefined();
         expect(tree.find((node) => node.data.nodeKey === "child2")).not.toBeUndefined();
     });

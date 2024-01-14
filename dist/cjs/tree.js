@@ -65,7 +65,7 @@ class Tree {
             if (!nodeMap.has(targetKey)) {
                 nodeMap.set(targetKey, []);
             }
-            nodeMap.get(targetKey).push({
+            nodeMap.get(targetKey)?.push({
                 ...node,
                 parentKey: null,
                 children: [],
@@ -76,7 +76,7 @@ class Tree {
             if (!node.data[childKey]) {
                 const targetNode = nodeMap
                     .get(node.data[key])
-                    .find((targetNode) => targetNode.level === node.level &&
+                    ?.find((targetNode) => targetNode.level === node.level &&
                     targetNode.data[key] === node.data[key]);
                 if (!targetNode) {
                     throw new Error(`Target node: ${key} not found`);
@@ -90,29 +90,31 @@ class Tree {
             }
             const childNode = nodeMap
                 .get(node.data[childKey])
-                .find((targetNode) => targetNode.level - 1 === node.level &&
+                ?.find((targetNode) => targetNode.level - 1 === node.level &&
                 targetNode.data[key] === node.data[childKey]);
-            if (childNode.level === 0) {
-                nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
-            }
-            else {
-                const targetNode = nodeMap
-                    .get(node.data[key])
-                    .find((targetNode) => targetNode.level + 1 === childNode.level &&
-                    targetNode.data[childKey] === childNode.data[key] &&
-                    !targetNode.children.includes(childNode));
-                if (!targetNode) {
-                    throw new Error("Parent node not found");
+            if (childNode) {
+                if (childNode?.level === 0) {
+                    nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
                 }
-                targetNode.children.push(this.#removeChildKeyFromObj(childNode, childKey));
-                if (targetNode.level === 1) {
-                    nestedNodes.push(targetNode);
-                }
-                const parentNode = parentNodes.find((parentNode) => parentNode.level === targetNode.level - 1 &&
-                    parentNode.data[childKey] === targetNode.data[key] &&
-                    targetNode.parentKey === null);
-                if (parentNode) {
-                    targetNode.parentKey = parentNode.data[key];
+                else {
+                    const targetNode = nodeMap
+                        .get(node.data[key])
+                        ?.find((targetNode) => targetNode.level + 1 === childNode.level &&
+                        targetNode.data[childKey] === childNode.data[key] &&
+                        !targetNode.children.includes(childNode));
+                    if (!targetNode) {
+                        throw new Error("Parent node not found");
+                    }
+                    targetNode.children.push(this.#removeChildKeyFromObj(childNode, childKey));
+                    if (targetNode.level === 1) {
+                        nestedNodes.push(targetNode);
+                    }
+                    const parentNode = parentNodes.find((parentNode) => parentNode.level === targetNode.level - 1 &&
+                        parentNode.data[childKey] === targetNode.data[key] &&
+                        targetNode.parentKey === null);
+                    if (parentNode) {
+                        targetNode.parentKey = parentNode.data[key];
+                    }
                 }
             }
         }

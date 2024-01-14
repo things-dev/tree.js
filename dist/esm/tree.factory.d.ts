@@ -1,4 +1,4 @@
-import { Tree, type Data } from "./tree";
+import { type Data, Tree } from "./tree";
 export declare const treeMap: Map<string, unknown>;
 export declare const TreeFactory: {
   build<T extends Data, K extends keyof T>({

@@ -1,4 +1,4 @@
-import { type TreeType, Data } from "./tree";
+import type { Data, TreeType } from "./tree";
 export declare class Node<T extends Data> {
   #private;
   level: number;
