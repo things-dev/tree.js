@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { TreeFactory } from "./tree.factory";
+import { TreeFactory } from "../src/tree.factory";
 
 type Nodes = {
   level: number;
