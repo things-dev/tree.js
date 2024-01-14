@@ -1,5 +1,6 @@
-import { type TreeType, Data } from "./tree";
 import { treeMap } from "./tree.factory";
+
+import type { Data, TreeType } from "./tree";
 
 export class Node<T extends Data> {
   level: number; // root is 0

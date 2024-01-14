@@ -27,7 +27,7 @@
     "format": "biome format ./src --write",
     "check": "biome check ./src",
     "lint": "biome lint ./src",
-    "lint:fix": "biome lint --apply ./src",
+    "lint:fix": "biome lint --apply-unsafe ./src",
     "release": "np --no-tests"
   },
   "devDependencies": {
@@ -39,18 +39,9 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "*.ts": [
-      "biome format --write",
-      "biome lint"
-    ]
+    "*.ts": ["biome format --write", "biome lint"]
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md",
-    "src"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
   "publishConfig": {
     "access": "public"
   }

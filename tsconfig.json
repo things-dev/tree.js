@@ -11,6 +11,7 @@
     "declarationMap": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "strict": true,
     "noImplicitAny": true
   },
   "include": ["src"],

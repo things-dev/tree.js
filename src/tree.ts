@@ -103,7 +103,7 @@ export class Tree<T extends Data> {
         nodeMap.set(targetKey, []);
       }
 
-      nodeMap.get(targetKey).push({
+      nodeMap.get(targetKey)?.push({
         ...node,
         parentKey: null,
         children: [],
@@ -116,7 +116,7 @@ export class Tree<T extends Data> {
       if (!node.data[childKey]) {
         const targetNode = nodeMap
           .get(node.data[key] as string)
-          .find(
+          ?.find(
             (targetNode) =>
               targetNode.level === node.level &&
               targetNode.data[key] === node.data[key],
@@ -137,41 +137,43 @@ export class Tree<T extends Data> {
 
       const childNode = nodeMap
         .get(node.data[childKey] as string)
-        .find(
+        ?.find(
           (targetNode) =>
             targetNode.level - 1 === node.level &&
             targetNode.data[key] === node.data[childKey],
         );
 
-      if (childNode.level === 0) {
-        nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
-      } else {
-        const targetNode = nodeMap
-          .get(node.data[key] as string)
-          .find(
-            (targetNode) =>
-              targetNode.level + 1 === childNode.level &&
-              targetNode.data[childKey] === childNode.data[key] &&
-              !targetNode.children.includes(childNode),
+      if (childNode) {
+        if (childNode?.level === 0) {
+          nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
+        } else {
+          const targetNode = nodeMap
+            .get(node.data[key] as string)
+            ?.find(
+              (targetNode) =>
+                targetNode.level + 1 === childNode.level &&
+                targetNode.data[childKey] === childNode.data[key] &&
+                !targetNode.children.includes(childNode),
+            );
+          if (!targetNode) {
+            throw new Error("Parent node not found");
+          }
+          targetNode.children.push(
+            this.#removeChildKeyFromObj(childNode, childKey),
           );
-        if (!targetNode) {
-          throw new Error("Parent node not found");
-        }
-        targetNode.children.push(
-          this.#removeChildKeyFromObj(childNode, childKey),
-        );
-        if (targetNode.level === 1) {
-          nestedNodes.push(targetNode);
-        }
+          if (targetNode.level === 1) {
+            nestedNodes.push(targetNode);
+          }
 
-        const parentNode = parentNodes.find(
-          (parentNode) =>
-            parentNode.level === targetNode.level - 1 &&
-            parentNode.data[childKey] === targetNode.data[key] &&
-            targetNode.parentKey === null,
-        );
-        if (parentNode) {
-          targetNode.parentKey = parentNode.data[key] as string;
+          const parentNode = parentNodes.find(
+            (parentNode) =>
+              parentNode.level === targetNode.level - 1 &&
+              parentNode.data[childKey] === targetNode.data[key] &&
+              targetNode.parentKey === null,
+          );
+          if (parentNode) {
+            targetNode.parentKey = parentNode.data[key] as string;
+          }
         }
       }
     }

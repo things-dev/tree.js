@@ -1,4 +1,4 @@
-import { Tree, type Data } from "./tree";
+import { type Data, Tree } from "./tree";
 
 /*
  *  Bridge to reference a Tree from a specific Node.
