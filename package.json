@@ -31,7 +31,7 @@
     "release": "np --no-tests"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.4.1",
+    "@biomejs/biome": "^1.5.3",
     "@types/bun": "^1.0.3",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
@@ -39,18 +39,9 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "*.ts": [
-      "biome format --write",
-      "biome lint"
-    ]
+    "*.ts": ["biome format --write", "biome lint"]
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md",
-    "src"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
   "publishConfig": {
     "access": "public"
   }
