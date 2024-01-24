@@ -91,17 +91,17 @@ export class Tree<T extends Data> {
     key: string;
     childKey: string;
   }) {
-    const newNodes = nodes.map((node) => ({
+    const nodeParams = nodes.map((node) => ({
       ...node,
       children: [],
     }));
     const nodeMap = new Map<string, NodeParam<T>>();
-    const rootNode = newNodes.find((node) => node.level === 0);
+    const rootNode = nodeParams.find((node) => node.level === 0);
     if (!rootNode) {
       throw new Error("Level 0 root node not found");
     }
 
-    for (const node of newNodes) {
+    for (const node of nodeParams) {
       nodeMap.set(node.data[key] as string, {
         ...node,
         children: [],
@@ -109,7 +109,7 @@ export class Tree<T extends Data> {
       });
     }
 
-    for (const node of newNodes) {
+    for (const node of nodeParams) {
       if (node.data[childKey]) {
         const parent = nodeMap.get(node.data[key] as string);
         if (!parent) {
@@ -130,7 +130,7 @@ export class Tree<T extends Data> {
     }
     const root = nodeMap.get(rootNode?.data[key] as string) as NodeParam<T>;
 
-    for (const node of newNodes) {
+    for (const node of nodeParams) {
       delete node.data[childKey];
     }
     return root;
