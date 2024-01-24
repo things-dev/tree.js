@@ -156,7 +156,9 @@ console.log(
     children: [],
     data: {
       nodeKey: "node4",
-      someProperty: {},
+      someProperty: {
+        someKey: 0.3392510625984465,
+      },
     },
     isRoot: false,
     isLeaf: true,
