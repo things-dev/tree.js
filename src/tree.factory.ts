@@ -7,7 +7,7 @@ import { type Data, Tree } from "./tree";
 export const treeMap = new Map<string, unknown>();
 
 export const TreeFactory = {
-  build<T extends Data, K extends keyof T>({
+  create<T extends Data, K extends keyof T>({
     nodes,
     key,
     childKey,

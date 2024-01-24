@@ -76,7 +76,7 @@ const nodes: Nodes = [
 ];
 
 describe("Treejs", () => {
-  const tree = TreeFactory.build({
+  const tree = TreeFactory.create({
     nodes: structuredClone(nodes),
     key: "nodeKey",
     childKey: "childNodeKey",
@@ -221,7 +221,7 @@ describe("Treejs", () => {
   });
 
   test("Two trees can be generated at the same time", () => {
-    const tree2 = TreeFactory.build({
+    const tree2 = TreeFactory.create({
       nodes: structuredClone(nodes),
       key: "nodeKey",
       childKey: "childNodeKey",
