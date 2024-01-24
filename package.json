@@ -25,7 +25,8 @@
     "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
     "typecheck": "bun run typecheck:esm && bun run typecheck:cjs",
     "format": "biome format ./src --write",
-    "check": "biome check ./src",
+    "check": "bun run typecheck && biome check ./src",
+    "check:fix": "biome check ./src",
     "lint": "biome lint ./src",
     "lint:fix": "biome lint --apply-unsafe ./src",
     "release": "np --no-tests"
@@ -39,18 +40,9 @@
     "typescript": "^5.3.3"
   },
   "lint-staged": {
-    "*.ts": [
-      "biome format --write",
-      "biome lint"
-    ]
+    "*.ts": ["biome format --write", "biome lint"]
   },
-  "files": [
-    "dist",
-    "package.json",
-    "LICENSE",
-    "README.md",
-    "src"
-  ],
+  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
   "publishConfig": {
     "access": "public"
   }
