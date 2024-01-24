@@ -1,7 +1,7 @@
 import { Tree } from "./tree";
 export const treeMap = new Map();
 export const TreeFactory = {
-    build({ nodes, key, childKey, }) {
+    create({ nodes, key, childKey, }) {
         if (typeof childKey !== "string") {
             throw new Error("childKey must be a string");
         }

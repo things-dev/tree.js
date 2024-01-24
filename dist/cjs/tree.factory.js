@@ -4,7 +4,7 @@ exports.TreeFactory = exports.treeMap = void 0;
 const tree_1 = require("./tree");
 exports.treeMap = new Map();
 exports.TreeFactory = {
-    build({ nodes, key, childKey, }) {
+    create({ nodes, key, childKey, }) {
         if (typeof childKey !== "string") {
             throw new Error("childKey must be a string");
         }

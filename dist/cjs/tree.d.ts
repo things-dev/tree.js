@@ -28,5 +28,6 @@ export declare class Tree<T extends Data> {
   find(fn: (node: Node<T>) => boolean): Node<T> | undefined;
   findOrThrow(fn: (node: Node<T>) => boolean): Node<T>;
   findMany(fn: (node: Node<T>) => boolean): Node<T>[];
+  flat(): Node<T>[];
 }
 //# sourceMappingURL=tree.d.ts.map

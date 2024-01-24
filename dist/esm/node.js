@@ -100,6 +100,9 @@ export class Node {
         return ancestors.map((ancestor) => ancestor.data[key]).join("/");
     }
     getTree() {
+        if (treeMap.size === 0) {
+            throw new Error("If you do not create a tree instance via TreeFactory, you cannot reference it from the getTree function of a Node instance. if you do not use TreeFactory, manage references to the tree instance on your own.");
+        }
         const tree = treeMap.get(this.#treeId);
         return tree;
     }
