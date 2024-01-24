@@ -1,12 +1,7 @@
 {
   "name": "@thingsinc/treejs",
-  "author": "Yuki Shimizu",
   "version": "0.2.0",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
   "description": "Simple Model for manipulating tree structure.",
-  "sideEffects": false,
   "keywords": [
     "tree",
     "treemodel",
@@ -16,19 +11,31 @@
     "structure"
   ],
   "license": "MIT",
+  "author": "Yuki Shimizu",
+  "sideEffects": false,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md",
+    "src"
+  ],
   "scripts": {
     "build": "rm -rf dist && bun run build:cjs && bun run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json",
-    "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
-    "typecheck": "bun run typecheck:esm && bun run typecheck:cjs",
-    "format": "biome format ./src --write",
     "check": "bun run typecheck && biome check ./src",
     "check:fix": "biome check ./src",
+    "format": "biome format ./src --write",
     "lint": "biome lint ./src",
     "lint:fix": "biome lint --apply-unsafe ./src",
-    "release": "np --no-tests"
+    "release": "np --no-tests",
+    "typecheck": "bun run typecheck:esm && bun run typecheck:cjs",
+    "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
+    "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
@@ -38,7 +45,6 @@
     "sort-package-json": "^2.6.0",
     "typescript": "^5.3.3"
   },
-  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
   "publishConfig": {
     "access": "public"
   }
