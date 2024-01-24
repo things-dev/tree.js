@@ -33,6 +33,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@types/bun": "^1.0.3",
+    "lefthook": "^1.6.1",
     "np": "^9.2.0",
     "typescript": "^5.3.3"
   },
