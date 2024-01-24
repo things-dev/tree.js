@@ -82,137 +82,49 @@ export class Tree<T extends Data> {
     key: string;
     childKey: string;
   }) {
-    const nodeMap = new Map<string, NodeParam<T>[]>();
-    const rootNodeParams: NodeParam<T>[] = nodes
-      .filter((node) => node.level === 0)
-      .map((node) => ({
-        ...node,
-        parentKey: null,
-        children: [],
-      }));
-    if (rootNodeParams.length === 0) {
+    const newNodes = nodes.map((node) => ({
+      ...node,
+      children: [],
+    }));
+    const nodeMap = new Map<string, NodeParam<T>>();
+    const rootNode = newNodes.find((node) => node.level === 0);
+    if (!rootNode) {
       throw new Error("Level 0 root node not found");
     }
-    const rootNode = rootNodeParams.reduce(
-      (acc, node) => {
-        if (Object.keys(acc).length === 0) {
-          Object.assign(acc, node);
-        } else {
-          acc.children.push(...node.children);
-        }
-        return acc;
-      },
-      {} as NodeParam<T>,
-    );
 
-    // Store node with a specific key as a child in nodeMap
-    for (const node of nodes) {
-      const targetKey = node.data[key] as string;
-
-      if (!nodeMap.has(targetKey)) {
-        nodeMap.set(targetKey, []);
-      }
-
-      nodeMap.get(targetKey)?.push({
+    for (const node of newNodes) {
+      nodeMap.set(node.data[key] as string, {
         ...node,
-        parentKey: null,
         children: [],
+        parentKey: null,
       });
     }
 
-    const parentNodes = Array(...nodeMap.values()).flat();
-    for (const node of nodes.sort((a, b) => b.level - a.level)) {
-      // validation
-      if (!node.data[childKey]) {
-        const targetNode = nodeMap
-          .get(node.data[key] as string)
-          ?.find(
-            (targetNode) =>
-              targetNode.level === node.level &&
-              targetNode.data[key] === node.data[key],
-          );
-        if (!targetNode) {
-          throw new Error(`Target node: ${key} not found`);
+    for (const node of newNodes) {
+      if (node.data[childKey]) {
+        const parent = nodeMap.get(node.data[key] as string);
+        if (!parent) {
+          throw new Error("Parent node not found");
         }
-        const parentNode = parentNodes.find(
-          (parentNode) =>
-            parentNode.level === targetNode.level - 1 &&
-            parentNode.data[childKey] === targetNode.data[key],
-        );
-        if (parentNode) {
-          targetNode.parentKey = parentNode?.data[key] as string;
-        }
-        // Skip node whose childKey is null because there is no need to aggregate descendants.
-        continue;
-      }
 
-      // Aggregation of parent-child relationships
-      const childNode = nodeMap
-        .get(node.data[childKey] as string)
-        ?.find(
-          (targetNode) =>
-            targetNode.level - 1 === node.level &&
-            targetNode.data[key] === node.data[childKey],
-        );
-      if (!childNode) {
-        throw new Error("Child node not found");
-      }
+        const child = nodeMap.get(node.data[childKey] as string);
 
-      if (childNode.data[childKey] === null) {
-        if (childNode.level === 1) {
-          childNode.parentKey = rootNode.data[key] as string;
-          rootNode.children.push(childNode);
-        } else {
-          const parentNode = parentNodes.find(
-            (parentNode) =>
-              parentNode.level === childNode.level - 1 &&
-              parentNode.data[childKey] === childNode.data[key],
-          );
-          childNode.parentKey = parentNode?.data[key] as string;
-          parentNode?.children.push(childNode);
+        if (!child) {
+          throw new Error("Child node not found");
         }
-      } else {
-        if (
-          childNode.level === 1 &&
-          !rootNode.children.find(
-            (child) =>
-              childNode.level === child.level &&
-              childNode.data[key] === child.data[childKey],
-          )
-        ) {
-          childNode.parentKey = rootNode.data[key] as string;
-          rootNode.children.push(childNode);
-        } else {
-          const targetNode = nodeMap
-            .get(node.data[key] as string)
-            ?.find(
-              (targetNode) =>
-                targetNode.level + 1 === childNode.level &&
-                targetNode.data[childKey] === childNode.data[key] &&
-                !targetNode.children.includes(childNode),
-            );
-          if (!targetNode) {
-            throw new Error("Parent node not found");
-          }
-          targetNode.children.push(childNode);
-          childNode.parentKey = targetNode.data[key] as string;
 
-          const parentNode = parentNodes.find(
-            (parentNode) =>
-              parentNode.level === targetNode.level - 1 &&
-              parentNode.data[childKey] === targetNode.data[key],
-          );
-          if (parentNode) {
-            targetNode.parentKey = parentNode?.data[key] as string;
-          }
-        }
+        parent?.children.push({
+          ...child,
+          parentKey: parent.data[key] as string,
+        });
       }
     }
+    const root = nodeMap.get(rootNode?.data[key] as string) as NodeParam<T>;
 
-    for (const node of nodes) {
+    for (const node of newNodes) {
       delete node.data[childKey];
     }
-    return rootNode;
+    return root;
   }
 
   #parse({
