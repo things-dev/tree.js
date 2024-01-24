@@ -82,7 +82,7 @@ const nodes = [
   },
 ];
 
-const tree = TreeFactory.build({
+const tree = TreeFactory.create({
   nodes,
   key: "nodeKey",
   childKey: "childNodeKey",
@@ -104,12 +104,7 @@ console.log(num3Node);
     hasParent: true,
     hasChildren: false,
     move: [Function: move],
-    addChild: [Function: addChild],
-    drop: [Function: drop],
-    getParentNode: [Function: getParentNode],
-    getAncestorNodes: [Function: getAncestorNodes],
-    getPath: [Function: getPath],
-    getTree: [Function: getTree],
+    ...
   }
 */
 console.log(num3Node.getParentNode());
@@ -128,12 +123,7 @@ console.log(num3Node.getParentNode());
         hasParent: true,
         hasChildren: false,
         move: [Function: move],
-        addChild: [Function: addChild],
-        drop: [Function: drop],
-        getParentNode: [Function: getParentNode],
-        getAncestorNodes: [Function: getAncestorNodes],
-        getPath: [Function: getPath],
-        getTree: [Function: getTree],
+        ...
       }
     ],
     data: {
@@ -145,12 +135,7 @@ console.log(num3Node.getParentNode());
     hasParent: true,
     hasChildren: true,
     move: [Function: move],
-    addChild: [Function: addChild],
-    drop: [Function: drop],
-    getParentNode: [Function: getParentNode],
-    getAncestorNodes: [Function: getAncestorNodes],
-    getPath: [Function: getPath],
-    getTree: [Function: getTree],
+    ...
   }
 */
 
@@ -178,12 +163,7 @@ console.log(
     hasParent: true,
     hasChildren: false,
     move: [Function: move],
-    addChild: [Function: addChild],
-    drop: [Function: drop],
-    getParentNode: [Function: getParentNode],
-    getAncestorNodes: [Function: getAncestorNodes],
-    getPath: [Function: getPath],
-    getTree: [Function: getTree],
+    ...
   }
 */
 ```
@@ -203,6 +183,10 @@ The `findOrThrow()` function of Tree instances returns the first Node in the pro
 #### `Tree#findMany`
 
 The `findMany()` function of Tree instances returns the all Node in the provided tree that satisfies the provided testing function. If no values satisfy the testing function, empty array is returned.
+
+#### `Tree#flat`
+
+The `flat()` function of Tree instances returns new Array instances with the all Node up to the 0 depth.
 
 ### Node
 

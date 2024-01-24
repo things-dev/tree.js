@@ -73,6 +73,15 @@ export class Tree<T extends Data> {
     return targetNodes;
   }
 
+  flat(): Node<T>[] {
+    const nodes: Node<T>[] = [];
+    this.root.move((node) => {
+      nodes.push(node);
+      return true;
+    });
+    return nodes;
+  }
+
   #buildParams<T extends Data>({
     nodes,
     key,

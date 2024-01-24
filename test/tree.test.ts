@@ -251,6 +251,12 @@ describe("Treejs", () => {
         tree.find((node) => node.data.nodeKey === "child2"),
       ).not.toBeUndefined();
     });
+
+    test("flat", () => {
+      const nodes = tree.flat();
+      expect(nodes).not.toBeUndefined();
+      expect(nodes.length).toEqual(5);
+    });
   });
 
   describe("when there are only level0 and level1 nodes", () => {
