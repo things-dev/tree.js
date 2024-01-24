@@ -93,7 +93,17 @@ export class Tree<T extends Data> {
     if (rootNodeParams.length === 0) {
       throw new Error("Level 0 root node not found");
     }
-    const nestedNodes: NodeParam<T>[] = [];
+    const rootNode = rootNodeParams.reduce(
+      (acc, node) => {
+        if (Object.keys(acc).length === 0) {
+          Object.assign(acc, node);
+        } else {
+          acc.children.push(...node.children);
+        }
+        return acc;
+      },
+      {} as NodeParam<T>,
+    );
 
     // Store node with a specific key as a child in nodeMap
     for (const node of nodes) {
@@ -110,9 +120,9 @@ export class Tree<T extends Data> {
       });
     }
 
+    const parentNodes = Array(...nodeMap.values()).flat();
     for (const node of nodes.sort((a, b) => b.level - a.level)) {
-      const parentNodes = Array(...nodeMap.values()).flat();
-
+      // validation
       if (!node.data[childKey]) {
         const targetNode = nodeMap
           .get(node.data[key] as string)
@@ -130,11 +140,13 @@ export class Tree<T extends Data> {
             parentNode.data[childKey] === targetNode.data[key],
         );
         if (parentNode) {
-          targetNode.parentKey = parentNode.data[key] as string;
+          targetNode.parentKey = parentNode?.data[key] as string;
         }
+        // Skip node whose childKey is null because there is no need to aggregate descendants.
         continue;
       }
 
+      // Aggregation of parent-child relationships
       const childNode = nodeMap
         .get(node.data[childKey] as string)
         ?.find(
@@ -142,10 +154,34 @@ export class Tree<T extends Data> {
             targetNode.level - 1 === node.level &&
             targetNode.data[key] === node.data[childKey],
         );
+      if (!childNode) {
+        throw new Error("Child node not found");
+      }
 
-      if (childNode) {
-        if (childNode?.level === 0) {
-          nestedNodes.push(this.#removeChildKeyFromObj(childNode, childKey));
+      if (childNode.data[childKey] === null) {
+        if (childNode.level === 1) {
+          childNode.parentKey = rootNode.data[key] as string;
+          rootNode.children.push(childNode);
+        } else {
+          const parentNode = parentNodes.find(
+            (parentNode) =>
+              parentNode.level === childNode.level - 1 &&
+              parentNode.data[childKey] === childNode.data[key],
+          );
+          childNode.parentKey = parentNode?.data[key] as string;
+          parentNode?.children.push(childNode);
+        }
+      } else {
+        if (
+          childNode.level === 1 &&
+          !rootNode.children.find(
+            (child) =>
+              childNode.level === child.level &&
+              childNode.data[key] === child.data[childKey],
+          )
+        ) {
+          childNode.parentKey = rootNode.data[key] as string;
+          rootNode.children.push(childNode);
         } else {
           const targetNode = nodeMap
             .get(node.data[key] as string)
@@ -158,41 +194,24 @@ export class Tree<T extends Data> {
           if (!targetNode) {
             throw new Error("Parent node not found");
           }
-          targetNode.children.push(
-            this.#removeChildKeyFromObj(childNode, childKey),
-          );
-          if (targetNode.level === 1) {
-            nestedNodes.push(targetNode);
-          }
+          targetNode.children.push(childNode);
+          childNode.parentKey = targetNode.data[key] as string;
 
           const parentNode = parentNodes.find(
             (parentNode) =>
               parentNode.level === targetNode.level - 1 &&
-              parentNode.data[childKey] === targetNode.data[key] &&
-              targetNode.parentKey === null,
+              parentNode.data[childKey] === targetNode.data[key],
           );
           if (parentNode) {
-            targetNode.parentKey = parentNode.data[key] as string;
+            targetNode.parentKey = parentNode?.data[key] as string;
           }
         }
       }
     }
 
-    const rootNodeObj = rootNodeParams.reduce(
-      (acc, node) => {
-        Object.assign(acc, node);
-        return acc;
-      },
-      {} as NodeParam<T>,
-    );
-    const rootNode = {
-      ...this.#removeChildKeyFromObj(
-        { ...rootNodeObj, children: [] },
-        childKey,
-      ),
-      level: 0,
-      children: nestedNodes,
-    };
+    for (const node of nodes) {
+      delete node.data[childKey];
+    }
     return rootNode;
   }
 
@@ -221,11 +240,6 @@ export class Tree<T extends Data> {
       data: nodeParam.data,
     }) as Node<T>;
 
-    return node;
-  }
-
-  #removeChildKeyFromObj<T extends Data>(node: NodeParam<T>, childKey: string) {
-    delete node.data[childKey];
     return node;
   }
 }
