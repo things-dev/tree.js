@@ -1,12 +1,7 @@
 {
   "name": "@thingsinc/treejs",
-  "author": "Yuki Shimizu",
   "version": "0.2.0",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
   "description": "Simple Model for manipulating tree structure.",
-  "sideEffects": false,
   "keywords": [
     "tree",
     "treemodel",
@@ -16,33 +11,40 @@
     "structure"
   ],
   "license": "MIT",
+  "author": "Yuki Shimizu",
+  "sideEffects": false,
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "LICENSE",
+    "README.md",
+    "src"
+  ],
   "scripts": {
-    "prepare": "husky install",
     "build": "rm -rf dist && bun run build:cjs && bun run build:esm",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json",
-    "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
-    "typecheck": "bun run typecheck:esm && bun run typecheck:cjs",
-    "format": "biome format ./src --write",
     "check": "bun run typecheck && biome check ./src",
     "check:fix": "biome check ./src",
+    "format": "biome format ./src --write",
     "lint": "biome lint ./src",
     "lint:fix": "biome lint --apply-unsafe ./src",
-    "release": "np --no-tests"
+    "release": "np --no-tests",
+    "typecheck": "bun run typecheck:esm && bun run typecheck:cjs",
+    "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
+    "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@types/bun": "^1.0.3",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0",
+    "lefthook": "^1.6.1",
     "np": "^9.2.0",
+    "sort-package-json": "^2.6.0",
     "typescript": "^5.3.3"
   },
-  "lint-staged": {
-    "*.ts": ["biome format --write", "biome lint"]
-  },
-  "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
   "publishConfig": {
     "access": "public"
   }
