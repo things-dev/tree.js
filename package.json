@@ -35,6 +35,7 @@
     "@types/bun": "^1.0.3",
     "lefthook": "^1.6.1",
     "np": "^9.2.0",
+    "sort-package-json": "^2.6.0",
     "typescript": "^5.3.3"
   },
   "files": ["dist", "package.json", "LICENSE", "README.md", "src"],
