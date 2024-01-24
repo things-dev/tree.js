@@ -134,6 +134,11 @@ export class Node<T extends Data> {
   }
 
   getTree(): TreeType<T> {
+    if (treeMap.size === 0) {
+      throw new Error(
+        "If you do not create a tree instance via TreeFactory, you cannot reference it from the getTree function of a Node instance. if you do not use TreeFactory, manage references to the tree instance on your own.",
+      );
+    }
     const tree = treeMap.get(this.#treeId) as TreeType<T>;
     return tree;
   }
