@@ -359,4 +359,122 @@ describe("Treejs", () => {
       expect(level1Nodes.length).toEqual(4);
     });
   });
+
+  describe("Multiple childNodes are connected to the level1 node.", () => {
+    const nodes: Nodes = [
+      {
+        level: 0,
+        data: {
+          nodeKey: "root",
+          childNodeKey: "child1",
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 0,
+        data: {
+          nodeKey: "root",
+          childNodeKey: "child2",
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 1,
+        data: {
+          nodeKey: "child1",
+          childNodeKey: null,
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 1,
+        data: {
+          nodeKey: "child2",
+          childNodeKey: "grandChild1",
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 1,
+        data: {
+          nodeKey: "child2",
+          childNodeKey: "grandChild2",
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 1,
+        data: {
+          nodeKey: "child2",
+          childNodeKey: "grandChild3",
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 2,
+        data: {
+          nodeKey: "grandChild1",
+          childNodeKey: null,
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 2,
+        data: {
+          nodeKey: "grandChild2",
+          childNodeKey: null,
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+      {
+        level: 2,
+        data: {
+          nodeKey: "grandChild3",
+          childNodeKey: null,
+          someProperty: {
+            someKey: Math.random(),
+          },
+        },
+      },
+    ];
+
+    let tree: TreeType<Omit<Data, "childNodeKey">>;
+
+    beforeEach(() => {
+      tree = TreeFactory.create({
+        nodes: structuredClone(nodes),
+        key: "nodeKey",
+        childKey: "childNodeKey",
+      });
+    });
+
+    afterEach(() => {
+      treeMap.clear();
+    });
+
+    test("Everything up to the terminal node must be generated.", () => {
+      const level0Nodes = tree.findMany((node) => node.level === 0);
+      const level1Nodes = tree.findMany((node) => node.level === 1);
+      const level2Nodes = tree.findMany((node) => node.level === 2);
+      expect(level0Nodes.length).toEqual(1);
+      expect(level1Nodes.length).toEqual(2);
+      expect(level2Nodes.length).toEqual(3);
+    });
+  });
 });
