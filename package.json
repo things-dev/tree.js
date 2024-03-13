@@ -37,9 +37,13 @@
     "typecheck:cjs": "tsc --pretty --noEmit -p tsconfig.cjs.json",
     "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json"
   },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.6.1",
     "@types/bun": "^1.0.8",
+    "@types/uuid": "^9.0.8",
     "lefthook": "^1.6.5",
     "np": "^10.0.1",
     "sort-package-json": "^2.8.0",
