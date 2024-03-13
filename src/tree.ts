@@ -1,4 +1,4 @@
-import { randomUUID } from "crypto";
+import { v4 as uuid } from "uuid";
 
 import { Node } from "./node";
 
@@ -28,7 +28,7 @@ export class Tree<T extends Data> {
     key: string;
     childKey: string;
   }) {
-    this.treeId = randomUUID();
+    this.treeId = uuid();
     const nodeParam = this.#buildParams({
       nodes,
       key,
