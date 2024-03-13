@@ -38,12 +38,12 @@
     "typecheck:esm": "tsc --pretty --noEmit -p tsconfig.esm.json"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.5.3",
-    "@types/bun": "^1.0.3",
-    "lefthook": "^1.6.1",
-    "np": "^9.2.0",
-    "sort-package-json": "^2.6.0",
-    "typescript": "^5.3.3"
+    "@biomejs/biome": "^1.6.1",
+    "@types/bun": "^1.0.8",
+    "lefthook": "^1.6.5",
+    "np": "^10.0.1",
+    "sort-package-json": "^2.8.0",
+    "typescript": "^5.4.2"
   },
   "publishConfig": {
     "access": "public"
