@@ -1,6 +1,6 @@
 {
   "name": "@thingsinc/treejs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple Model for manipulating tree structure.",
   "keywords": [
     "tree",
