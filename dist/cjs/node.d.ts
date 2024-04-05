@@ -37,7 +37,7 @@ export declare class Node<T extends Data> {
   drop(): void;
   getParentNode(): Node<T> | undefined;
   getAncestorNodes(): Node<T>[];
-  getPath(key: string): string;
+  getPath(key: keyof T): string;
   getTree(): TreeType<T>;
 }
 //# sourceMappingURL=node.d.ts.map
