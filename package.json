@@ -47,7 +47,7 @@
     "lefthook": "^1.6.8",
     "np": "^10.0.2",
     "sort-package-json": "^2.10.0",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.4"
   },
   "publishConfig": {
     "access": "public"
