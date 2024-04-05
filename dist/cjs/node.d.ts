@@ -11,6 +11,7 @@ export declare class Node<T extends Data> {
   hasChildren: boolean;
   constructor({
     treeId,
+    ancestorPath,
     key,
     childKey,
     level,
@@ -19,6 +20,7 @@ export declare class Node<T extends Data> {
     data,
   }: {
     treeId: string;
+    ancestorPath: string;
     key: string;
     childKey: string;
     level: number;

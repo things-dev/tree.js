@@ -93,9 +93,12 @@ class Tree {
     }
     return root;
   }
-  #parse({ key, childKey, nodeParam }) {
+  #parse({ key, childKey, nodeParam, ancestorPath }) {
+    const path =
+      ancestorPath === undefined ? nodeParam.data[key] : ancestorPath;
     const node = new node_1.Node({
       treeId: this.treeId,
+      ancestorPath: path,
       key,
       childKey,
       level: nodeParam.level,
@@ -105,6 +108,7 @@ class Tree {
           key,
           childKey,
           nodeParam: childNodeModel,
+          ancestorPath: `${path}/${childNodeModel.data[key]}`,
         }),
       ),
       data: nodeParam.data,
