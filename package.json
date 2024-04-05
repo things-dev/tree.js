@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.6.1",
-    "@types/bun": "^1.0.8",
+    "@types/bun": "^1.0.12",
     "@types/uuid": "^9.0.8",
     "lefthook": "^1.6.5",
     "np": "^10.0.1",
