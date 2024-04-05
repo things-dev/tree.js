@@ -140,13 +140,21 @@ export class Tree<T extends Data> {
     key,
     childKey,
     nodeParam,
+    ancestorPath,
   }: {
     key: string;
     childKey: string;
     nodeParam: NodeParam<T>;
+    ancestorPath?: string;
   }) {
+    const path =
+      ancestorPath === undefined
+        ? (nodeParam.data[key] as string)
+        : ancestorPath;
+
     const node = new Node<T>({
       treeId: this.treeId,
+      ancestorPath: path,
       key,
       childKey,
       level: nodeParam.level,
@@ -156,6 +164,7 @@ export class Tree<T extends Data> {
           key,
           childKey,
           nodeParam: childNodeModel,
+          ancestorPath: `${path}/${childNodeModel.data[key] as string}`,
         }),
       ),
       data: nodeParam.data,

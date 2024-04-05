@@ -13,11 +13,13 @@ export class Node<T extends Data> {
   hasChildren: boolean;
 
   #treeId: string;
+  #ancestorPath: string;
   #key: string;
   #childKey: string;
 
   constructor({
     treeId,
+    ancestorPath,
     key,
     childKey,
     level,
@@ -26,6 +28,7 @@ export class Node<T extends Data> {
     data,
   }: {
     treeId: string;
+    ancestorPath: string;
     key: string;
     childKey: string;
     level: number;
@@ -43,6 +46,7 @@ export class Node<T extends Data> {
     this.hasChildren = !this.isLeaf;
 
     this.#treeId = treeId;
+    this.#ancestorPath = ancestorPath;
     this.#key = key;
     this.#childKey = childKey;
   }
@@ -91,6 +95,7 @@ export class Node<T extends Data> {
   addChild({ data }: { data: T }): Node<T> {
     const newChildNode = new Node<T>({
       treeId: this.#treeId,
+      ancestorPath: this.#ancestorPath,
       key: this.#key,
       childKey: this.#childKey,
       level: this.level + 1,
@@ -113,7 +118,9 @@ export class Node<T extends Data> {
   getParentNode(): Node<T> | undefined {
     const tree = this.getTree();
     const parentNode = tree.find(
-      (node) => node.data[this.#key] === this.parentKey,
+      (node) =>
+        node.data[this.#key] === this.parentKey &&
+        this.#ancestorPath.includes(node.#ancestorPath),
     );
     return parentNode;
   }
