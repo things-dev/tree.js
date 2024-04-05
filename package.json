@@ -41,7 +41,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1",
+    "@biomejs/biome": "^1.6.4",
     "@types/bun": "^1.0.12",
     "@types/uuid": "^9.0.8",
     "lefthook": "^1.6.8",
