@@ -95,7 +95,7 @@ export class Node<T extends Data> {
   addChild({ data }: { data: T }): Node<T> {
     const newChildNode = new Node<T>({
       treeId: this.#treeId,
-      ancestorPath: this.#ancestorPath,
+      ancestorPath: `${this.#ancestorPath}/${data[this.#key]}`,
       key: this.#key,
       childKey: this.#childKey,
       level: this.level + 1,
