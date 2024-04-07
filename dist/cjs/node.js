@@ -77,7 +77,7 @@ class Node {
   addChild({ data }) {
     const newChildNode = new Node({
       treeId: this.#treeId,
-      ancestorPath: this.#ancestorPath,
+      ancestorPath: `${this.#ancestorPath}/${data[this.#key]}`,
       key: this.#key,
       childKey: this.#childKey,
       level: this.level + 1,
