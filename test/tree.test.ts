@@ -1,5 +1,5 @@
-import { describe, beforeEach, afterEach, expect, test } from "bun:test";
-import { TreeFactory, TreeType, treeMap } from "../src";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
+import { TreeFactory, type TreeType, treeMap } from "../src";
 
 type Data = {
   nodeKey: string;
@@ -229,7 +229,7 @@ describe("Treejs", () => {
       const path = node?.getPath("nodeKey");
 
       expect(path).not.toBeUndefined();
-      expect(path).toBe("root/child1/child2");
+      expect(path).toBe("root/child1/child2/child3");
     });
 
     test("Two trees can be generated at the same time", () => {

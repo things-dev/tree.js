@@ -141,7 +141,7 @@ console.log(num3Node.getParentNode());
 
 console.log(num3Node.getPath("nodeKey"));
 /* output
-  root/node1
+  root/node1/node3
 */
 
 console.log(
@@ -250,7 +250,7 @@ root: {
 }
 
 // current node is level2
-node.getPath('key') // -> level0Node/level1Node
+level2Node.getPath('key') // -> level0Node/level1Node/level2Node
 ```
 
 #### `Node#getTree`
