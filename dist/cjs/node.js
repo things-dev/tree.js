@@ -115,7 +115,9 @@ class Node {
   }
   getPath(key) {
     const ancestors = this.getAncestorNodes();
-    return ancestors.map((ancestor) => ancestor.data[key]).join("/");
+    return `${ancestors.map((ancestor) => ancestor.data[key]).join("/")}/${
+      this.data[key]
+    }`;
   }
   getTree() {
     if (tree_factory_1.treeMap.size === 0) {

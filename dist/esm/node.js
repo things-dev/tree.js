@@ -113,7 +113,9 @@ export class Node {
   }
   getPath(key) {
     const ancestors = this.getAncestorNodes();
-    return ancestors.map((ancestor) => ancestor.data[key]).join("/");
+    return `${ancestors.map((ancestor) => ancestor.data[key]).join("/")}/${
+      this.data[key]
+    }`;
   }
   getTree() {
     if (treeMap.size === 0) {
