@@ -137,7 +137,9 @@ export class Node<T extends Data> {
 
   getPath(key: keyof T): string {
     const ancestors = this.getAncestorNodes();
-    return ancestors.map((ancestor) => ancestor.data[key]).join("/");
+    return `${ancestors.map((ancestor) => ancestor.data[key]).join("/")}/${
+      this.data[key]
+    }`;
   }
 
   getTree(): TreeType<T> {
