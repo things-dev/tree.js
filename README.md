@@ -24,7 +24,7 @@ yarn add @thingsinc/treejs
 ## Usage
 
 ```ts
-import { TreeFactory } from "@things/treejs";
+import { TreeFactory } from "@thingsinc/treejs";
 
 // CommonJS
 // const { TreeFactory } = require("@thingsinc/treejs")
